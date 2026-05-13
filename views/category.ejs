@@ -33,18 +33,30 @@
             <% } %>
 
             <% concepts.forEach(concept => { %>
-                <article class="concept-card">
-                    <h2><%= concept.title %></h2>
+                <article class="concept-card" style="position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <h2 style="margin-top: 0;"><%= concept.title %></h2>
+                        <form action="/delete-concept" method="POST" onsubmit="return confirm('정말 이 개념을 삭제하시겠습니까?');">
+                            <input type="hidden" name="concept_id" value="<%= concept.id %>">
+                            <input type="hidden" name="category_id" value="<%= category.id %>">
+                            <button type="submit" style="background: #e74c3c; padding: 0.3rem 0.6rem; font-size: 0.8rem;">삭제</button>
+                        </form>
+                    </div>
                     <p style="white-space: pre-wrap;"><%= concept.content %></p>
                     
                     <div class="comment-section">
                         <h4>댓글</h4>
-                        <!-- 댓글 목록 (백엔드 연동 필요) -->
+                        <!-- 댓글 목록 -->
                         <div id="comments-<%= concept.id %>">
                             <% if (concept.comments && concept.comments.length > 0) { %>
                                 <% concept.comments.forEach(comment => { %>
-                                    <div style="margin-bottom: 0.5rem; border-bottom: 1px dashed #ddd; padding-bottom: 0.3rem;">
-                                        <strong><%= comment.author %></strong>: <%= comment.comment %>
+                                    <div style="margin-bottom: 0.5rem; border-bottom: 1px dashed #ddd; padding-bottom: 0.3rem; display: flex; justify-content: space-between; align-items: center;">
+                                        <span><strong><%= comment.author %></strong>: <%= comment.comment %></span>
+                                        <form action="/delete-comment" method="POST" onsubmit="return confirm('이 댓글을 삭제하시겠습니까?');" style="margin: 0;">
+                                            <input type="hidden" name="comment_id" value="<%= comment.id %>">
+                                            <input type="hidden" name="category_id" value="<%= category.id %>">
+                                            <button type="submit" style="background: none; color: #e74c3c; padding: 0; border: none; font-size: 0.8rem; cursor: pointer;">[삭제]</button>
+                                        </form>
                                     </div>
                                 <% }) %>
                             <% } else { %>

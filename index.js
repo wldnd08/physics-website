@@ -76,6 +76,30 @@ app.post('/add-comment', async (req, res) => {
   }
 });
 
+// 개념 삭제하기
+app.post('/delete-concept', async (req, res) => {
+  const { concept_id, category_id } = req.body;
+  try {
+    await pool.query('DELETE FROM concepts WHERE id = $1', [concept_id]);
+    res.redirect(`/category/${category_id}`);
+  } catch (err) {
+    console.error(err);
+    res.send('삭제 중 오류가 발생했습니다.');
+  }
+});
+
+// 댓글 삭제하기
+app.post('/delete-comment', async (req, res) => {
+  const { comment_id, category_id } = req.body;
+  try {
+    await pool.query('DELETE FROM comments WHERE id = $1', [comment_id]);
+    res.redirect(`/category/${category_id}`);
+  } catch (err) {
+    console.error(err);
+    res.send('댓글 삭제 중 오류가 발생했습니다.');
+  }
+});
+
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
